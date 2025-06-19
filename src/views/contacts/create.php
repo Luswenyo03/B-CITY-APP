@@ -1,0 +1,75 @@
+<?php $title = "Create New Contact"; ?>
+
+<h2>Create New Contact</h2>
+<form id="contactForm" method="POST" onsubmit="validateForm(event, 'contactForm')">
+    <div>
+        <button type="button" class="tablink" onclick="openTab(event, 'General', 'contactForm')">General</button>
+        <button type="button" class="tablink" onclick="openTab(event, 'Clients', 'contactForm')">Clients</button>
+    </div>
+
+    <div id="General" class="tab">
+        <div>
+            <label>Surname: <input type="text" name="surname"></label>
+        </div>
+        <div>
+            <label>Name: <input type="text" name="name"></label>
+        </div>
+        <div>
+            <label>Email: <input type="email" name="email"></label>
+        </div>
+    </div>
+
+    <div id="Clients" class="tab">
+        <div>
+            <label>Link to Clients:
+                <select name="client_ids[]" multiple>
+                    <?php foreach ($clients as $client): ?>
+                        <option value="<?php echo $client['id']; ?>">
+                            <?php echo htmlspecialchars($client['name']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <?php if (isset($error)): ?>
+        <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
+    <?php endif; ?>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+function openTab(evt, tabName, formId) {
+    const form = document.getElementById(formId);
+    form.querySelectorAll('.tab').forEach(tab => {
+        tab.style.display = 'none';
+    });
+    document.getElementById(tabName).style.display = 'block';
+
+    form.querySelectorAll('.tablink').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    evt.currentTarget.classList.add('active');
+}
+
+// Optionally initialize tabs on load:
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contactForm');
+    form.querySelector('.tablink').click();
+});
+</script>
+
+<style>
+.tab {
+    margin-top: 15px;
+}
+.tablink.active {
+    font-weight: bold;
+}
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+</style>
